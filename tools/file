@@ -1,0 +1,62 @@
+# coding=utf-8
+# -*- coding: UTF-8 -*-
+import os
+
+from PIL import Image
+
+resolutions = {}
+rm_images = {}
+failed_images = []
+
+
+def run():
+    image_dir = "C:\Users\Rock\Desktop\image";
+    image_list = os.listdir(image_dir)
+    image_count = len(image_list)
+    count = 0
+    for file in image_list:
+        file_path = image_dir + '\\' + file
+        image = None
+        try:
+            image = Image.open(file_path)
+        except:
+            print 'open image failed. just record it.', file_path
+            failed_images.append(file_path)
+            # os.remove(file_path)
+            continue
+        width = max(image.size[0], image.size[1])
+        height = min(image.size[0], image.size[1])
+        image.close()
+        size = (width, height)
+        if count > 100000:
+            break
+        count += 1
+
+        if height <= 1200:
+            os.remove(file_path)
+            if not rm_images.has_key(size):
+                rm_images[size] = 0
+            rm_images[size] += 1
+            print 'remove image ', size
+        else:
+            if not resolutions.has_key(size):
+                resolutions[size] = 0
+            resolutions[size] += 1
+
+    print "Remove Pictures ==========="
+    for key in rm_images.keys():
+        print key, rm_images[key]
+    print "Remain Pictures ==========="
+    for key in resolutions.keys():
+        print key, resolutions[key]
+    print "Failed images ==========="
+    for path in file_path:
+        print path
+
+
+if __name__ == '__main__':
+    run()
+
+
+
+
