@@ -4,32 +4,44 @@ __author__ = 'Rock'
 import os
 import shutil
 import image_libs
+from tools.file import file_libs
 from image_libs import ImageNameCreator
 import re
 from PIL import Image
 from PIL.ExifTags import TAGS
 
 
-def rename_photos(sou, dest):
-    print sou, dest
-    if dest:
-        os.makedirs(dest)
-        if not os.path.exists(dest):
-            print('Destination directory not exists. ')
-            return False
+def rename_photos(src, dst):
+    photodir = src
+    if dst:
+        if not os.path.isdir(dst):
+            pass
+        else:
+            if len(os.listdir(dst)) > 0:
+                print 'Destination directory is not empty. Failed!'
+                return False
+            shutil.rmtree(dst)
+        photodir = dst
+        shutil.copytree(src, dst, False)
+    if not photodir:
+        print('Photo directory is illegal. ')
+        return False
+
+    def rename_photo(image):
+        image_libs.rename_image(image, ImageNameCreator.EXIF_TIME)
+    file_libs.iterate(photodir, rename_photo, None)
+    return True
 
 
-def __rename_photo():
-    pass
-
-
+def __test_rename_photos():
+    src = '/Users/zhangyan/Desktop/test'
+    dst = '/Users/zhangyan/Desktop/res'
+    print rename_photos(src, dst)
 
 
 if __name__ == '__main__':
-    fileName = 'C:\Users\Rock\Desktop\\hello.JPG'
+    fileName = '/Users/zhangyan/Desktop/sky.jpg'
     exif = image_libs.read_exif_info(fileName)
-    # print exif
-    print rename_image(fileName, ImageNameCreator.EXIF_TIME)
-    print len(os.path.splitext(fileName))
+    __test_rename_photos()
 
 

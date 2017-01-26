@@ -6,15 +6,25 @@ import re
 import shutil
 
 
-def filecopy(sou_file_path, dest_file_path):
-    if not sou_file_path or not os.path.isfile(sou_file_path):
-        return False
-
-
+def iterate(path, file_callback=None, dir_callback=None):
+    if not os.path.exists(path):
+        return
+    path = os.path.abspath(path)
+    if os.path.isfile(path) and callable(file_callback):
+        file_callback(path)
+    elif os.path.isdir(path):
+        if callable(dir_callback):
+            dir_callback(path)
+        for f in os.listdir(path):
+            iterate(os.path.join(path, f), file_callback, dir_callback)
 
 
 if __name__ == '__main__':
-    fileName = 'C:\Users\Rock\Desktop\\hello.JPG'
-    print len(os.path.splitext(fileName))
-
-
+    path = '/Users/zhangyan/Work/git/buding/Hulk'
+    def pf(path):
+        print path
+    func = pf
+    def pd(path):
+        print "### "+path
+    f2 = pd
+    iterate(path, func, f2)
