@@ -86,7 +86,7 @@ def process_per_image_page(url):
         except:
             continue
         soup = BeautifulSoup(ret.text)
-        tag_dl = soup.find("dl", {"class": "model wallpaper-down clearfix"})
+        tag_dl = soup.find("dl", {"class": "core wallpaper-down clearfix"})
         if tag_dl:
             first_a = tag_dl.find("a", {"target": "_blank"})
             if first_a:

@@ -3,6 +3,7 @@
 __author__ = 'Rock'
 import os
 import re
+from tools.file import file_libs
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -24,8 +25,7 @@ def read_exif_info(image_path):
 
 
 def rename_image(image_path, image_name_creator):
-    """Rename an image file with the given name creator. """\
-
+    """Rename an image file with the given name creator. """
     if not image_name_creator or not callable(image_name_creator):
         print('Lack of valid image name creator.')
         return False
@@ -44,18 +44,22 @@ def rename_image(image_path, image_name_creator):
 
 
 class ImageNameCreator:
-
     def __init__(self):
         pass
 
     @staticmethod
     def __name_decorate(name, image_path):
         ext = os.path.splitext(image_path)
-        illegal_chars = re.compile('[\\\\/:*?"<>|]')
-        name = illegal_chars.sub('_', name)
+        name = file_libs.correct_file_name(name)
+        dir_name = os.path.dirname(image_path)
+        ext_name = ''
         if len(ext) == 2 and not name.endswith(ext[1]):
-            name += ext[1]
-        return name
+            ext_name = ext[1]
+        if os.path.exists(os.path.join(dir_name, name + ext_name)):
+            for i in range(2, 10000):
+                if not os.path.exists(os.path.join(dir_name, name + "(%d)" % i + ext_name)):
+                    return name + ("(%d)" % i) + ext_name
+        return name + ext_name
 
     @staticmethod
     def __default(image_path):
@@ -73,12 +77,9 @@ class ImageNameCreator:
     EXIF_TIME = __exif_time
 
 
-
 if __name__ == '__main__':
     fileName = 'C:\Users\Rock\Desktop\\hello.JPG'
     exif = read_exif_info(fileName)
     # print exif
     print rename_image(fileName, ImageNameCreator.EXIF_TIME)
     print len(os.path.splitext(fileName))
-
-

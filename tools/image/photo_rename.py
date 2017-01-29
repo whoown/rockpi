@@ -17,7 +17,19 @@ def rename_photos(src, dst):
         if not os.path.isdir(dst):
             pass
         else:
-            if len(os.listdir(dst)) > 0:
+            files = os.listdir(dst)
+            is_empty = True
+            for f in files:
+                if os.path.isdir(f):
+                    is_empty = False
+                    break
+                elif os.path.islink(f):
+                    pass
+                elif os.path.isfile(f):
+                    if not os.path.basename(f).startswith("."):
+                        is_empty = False
+                        break
+            if not is_empty:
                 print 'Destination directory is not empty. Failed!'
                 return False
             shutil.rmtree(dst)
@@ -29,6 +41,7 @@ def rename_photos(src, dst):
 
     def rename_photo(image):
         image_libs.rename_image(image, ImageNameCreator.EXIF_TIME)
+
     file_libs.iterate(photodir, rename_photo, None)
     return True
 
@@ -43,5 +56,3 @@ if __name__ == '__main__':
     fileName = '/Users/zhangyan/Desktop/sky.jpg'
     exif = image_libs.read_exif_info(fileName)
     __test_rename_photos()
-
-
