@@ -3,12 +3,10 @@
 __author__ = 'Rock'
 import os
 import shutil
+
 import image_libs
-from tools.file import file_libs
 from image_libs import ImageNameCreator
-import re
-from PIL import Image
-from PIL.ExifTags import TAGS
+from tools.file import file_libs
 
 
 def rename_photos(src, dst):
@@ -53,6 +51,7 @@ def __test_rename_photos():
 
 
 if __name__ == '__main__':
-    fileName = '/Users/zhangyan/Desktop/sky.jpg'
-    exif = image_libs.read_exif_info(fileName)
-    __test_rename_photos()
+    # __test_rename_photos()
+    src = '/Users/zhangyan/Desktop/2016.05.08-2016.05.23 日常'
+    src = '/Users/zhangyan/Records'
+    print rename_photos(src, None)
