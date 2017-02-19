@@ -38,7 +38,12 @@ def rename_photos(src, dst):
         return False
 
     def rename_photo(image):
-        image_libs.rename_image(image, ImageNameCreator.EXIF_TIME)
+        image = image.lower()
+        renamed = False
+        if image.endswith("jpg"):
+            renamed = image_libs.rename_image(image, ImageNameCreator.EXIF_TIME)
+        if not renamed:
+            renamed = image_libs.rename_image(image, ImageNameCreator.MODIFIED_TIME)
 
     file_libs.iterate(photodir, rename_photo, None)
     return True
@@ -53,5 +58,6 @@ def __test_rename_photos():
 if __name__ == '__main__':
     # __test_rename_photos()
     src = '/Users/zhangyan/Desktop/2016.05.08-2016.05.23 日常'
+    src = '/Users/zhangyan/Desktop/Images'
     src = '/Users/zhangyan/Records'
     print rename_photos(src, None)

@@ -35,20 +35,19 @@ def make_sure_dir(dir_path):
         return os.path.isdir(dir_path)
 
 
+def fix_media_file_name(file_path):
+    if not os.path.isfile(file_path):
+        return
+    file_name = os.path.basename(file_path)
+    file_name = re.sub("\(\d\)", "", file_name)
+    new_path = os.path.join(os.path.dirname(file_path), file_name)
+    print new_path
+    os.rename(file_path, new_path)
+
+
 if __name__ == '__main__':
-    path = '/Users/zhangyan/Work/git/buding/Hulk'
+    def cbk(path):
+        fix_media_file_name(path)
 
-
-    def pf(path):
-        print path
-
-
-    func = pf
-
-
-    def pd(path):
-        print "### " + path
-
-
-    f2 = pd
-    iterate(path, func, f2)
+    path = "/Users/zhangyan/Records"
+    iterate(path, cbk)
