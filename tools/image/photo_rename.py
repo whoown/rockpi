@@ -58,6 +58,6 @@ def __test_rename_photos():
 if __name__ == '__main__':
     # __test_rename_photos()
     src = '/Users/zhangyan/Desktop/2016.05.08-2016.05.23 日常'
-    src = '/Users/zhangyan/Desktop/Images'
-    src = '/Users/zhangyan/Records'
+    src = '/Users/zhangyan/Desktop/now'
+    # src = '/Users/zhangyan/Records'
     print rename_photos(src, None)
